@@ -2,6 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import Login from '../Screens/Login'
+import Dashboard from '../Screens/Dashboard'
 
 const StackNavigator = () => {
 	const Stack = createStackNavigator()
@@ -16,6 +17,15 @@ const StackNavigator = () => {
 					headerStyle: { backgroundColor: '#d83450' },
 				}}
 				component={Login}
+			/>
+			<Stack.Screen
+				name="Dashboard"
+				options={{
+					headerShown: true,
+					headerTintColor: 'white',
+					headerStyle: { backgroundColor: '#d83450' },
+				}}
+				component={Dashboard}
 			/>
 		</Stack.Navigator>
 	)

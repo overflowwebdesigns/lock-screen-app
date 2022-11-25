@@ -1,15 +1,55 @@
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { Input, Button } from 'react-native-elements'
-import React from 'react'
-import Logo from '../assets/icon.png'
+import { useSelector, useDispatch } from 'react-redux'
+import { showMessage } from 'react-native-flash-message'
 
-const Login = () => {
+import Logo from '../assets/icon.png'
+import Loading from '../Components/Loading'
+import { clear, loginRequest, pending } from '../Reducers/loginSlice'
+
+const Login = ({ navigation }) => {
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+
+	const dispatch = useDispatch()
+
+	const userLogin = useSelector((state) => state.userLogin)
+	const { loading, error, userInfo } = userLogin
+
+	useEffect(() => {
+		dispatch(clear())
+		if (userInfo && userInfo.email) {
+			navigation.navigate('Dashboard')
+		}
+		if (error) {
+			showMessage({
+				message: error,
+				type: 'danger',
+				floating: false,
+				style: { alignItems: 'center' },
+				fontWeight: 'bold',
+			})
+		}
+	}, [userInfo, navigation, error])
+
 	const loginHandler = () => {
-		alert('Login')
+		if (email === '' || password === '') {
+			showMessage({
+				message: 'You must complete all fields!',
+				type: 'warning',
+				floating: false,
+				style: { alignItems: 'center' },
+			})
+		} else {
+			dispatch(pending())
+			dispatch(loginRequest(email.toLowerCase(), password))
+		}
 	}
 
 	return (
 		<View style={styles.container}>
+			{loading && <Loading />}
 			<Image style={styles.image} source={Logo} />
 			<View style={styles.form}>
 				<Input placeholder="Email Address" onChangeText={(e) => setEmail(e)} />
