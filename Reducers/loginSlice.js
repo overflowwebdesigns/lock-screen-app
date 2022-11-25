@@ -35,7 +35,7 @@ const loginSlice = createSlice({
 		},
 		rejected: (state, action) => {
 			state.loading = false
-			state.error = 'An error occoured'
+			state.error = 'Login Failed!'
 		},
 		clear: (state) => {
 			state.error = null

@@ -17,7 +17,6 @@ const Dashboard = ({ navigation }) => {
 		if (!userInfo.email) {
 			navigation.navigate('Login')
 		}
-		console.log(userInfo)
 	}, [userInfo, loading, error])
 
 	const logoutHandler = (e) => {
