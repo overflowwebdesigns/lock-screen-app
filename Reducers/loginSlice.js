@@ -6,11 +6,7 @@ const initialState = {
 	error: null,
 	userInfo: {
 		user: null,
-		isAdmin: null,
-		apiURL: null,
-		apiToken: null,
-		userToken: null,
-		facebookPage: null,
+		email: null,
 	},
 }
 
@@ -23,7 +19,7 @@ export const loginRequest = createAsyncThunk('user/getUser', async (data) => {
 	}
 
 	const res = await axios.post(
-		'http://localhost:5001/api/users/login',
+		'/api/users/login',
 		{ username: data.username, password: data.password },
 		config
 	)
@@ -38,11 +34,7 @@ const loginSlice = createSlice({
 		logout: (state) => {
 			state.loading = false
 			state.userInfo.user = null
-			state.userInfo.isAdmin = null
-			state.userInfo.apiURL = null
-			state.userInfo.apiToken = null
-			state.userInfo.userToken = null
-			state.userInfo.facebookPage = null
+			state.userInfo.email = null
 			state.error = null
 		},
 	},
