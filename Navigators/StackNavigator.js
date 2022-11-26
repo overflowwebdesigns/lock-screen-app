@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import Login from '../Screens/Login'
 import Dashboard from '../Screens/Dashboard'
+import { Button } from 'react-native-elements'
+import { StyleSheet } from 'react-native'
 
 const StackNavigator = () => {
 	const Stack = createStackNavigator()
@@ -24,11 +26,18 @@ const StackNavigator = () => {
 					headerShown: true,
 					headerTintColor: 'white',
 					headerStyle: { backgroundColor: '#d83450' },
+					headerLeft: () => null,
 				}}
 				component={Dashboard}
 			/>
 		</Stack.Navigator>
 	)
 }
+
+const styles = StyleSheet.create({
+	buttonStyle: {
+		backgroundColor: '#d83450',
+	},
+})
 
 export default StackNavigator

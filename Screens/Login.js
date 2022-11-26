@@ -49,28 +49,36 @@ const Login = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			{loading && <Loading />}
-			<Image style={styles.image} source={Logo} />
-			<View style={styles.form}>
-				<Input placeholder="Email Address" onChangeText={(e) => setEmail(e)} />
+			{loading ? (
+				<Loading />
+			) : (
+				<>
+					<Image style={styles.image} source={Logo} />
+					<View style={styles.form}>
+						<Input
+							placeholder="Email Address"
+							onChangeText={(e) => setEmail(e)}
+						/>
 
-				<Input
-					placeholder="Password"
-					secureTextEntry={true}
-					onChangeText={(e) => setPassword(e)}
-				/>
-				<Button
-					buttonStyle={styles.loginButton}
-					title="Login"
-					onPress={loginHandler}
-				/>
-				<Button
-					buttonStyle={styles.registerButton}
-					titleStyle={{ color: 'black' }}
-					title="Register"
-					onPress={() => navigation.navigate('Register')}
-				/>
-			</View>
+						<Input
+							placeholder="Password"
+							secureTextEntry={true}
+							onChangeText={(e) => setPassword(e)}
+						/>
+						<Button
+							buttonStyle={styles.loginButton}
+							title="Login"
+							onPress={loginHandler}
+						/>
+						<Button
+							buttonStyle={styles.registerButton}
+							titleStyle={{ color: 'black' }}
+							title="Register"
+							onPress={() => navigation.navigate('Register')}
+						/>
+					</View>
+				</>
+			)}
 		</View>
 	)
 }

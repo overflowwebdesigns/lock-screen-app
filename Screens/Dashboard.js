@@ -27,13 +27,19 @@ const Dashboard = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			{loading && <Loading />}
-			<Text style={styles.text}>Dashboard</Text>
-			<Button
-				buttonStyle={styles.loginButton}
-				title="Logout"
-				onPress={logoutHandler}
-			/>
+			{loading ? (
+				<Loading />
+			) : (
+				<>
+					<Text style={styles.text}>Welcome {userInfo.name}</Text>
+					<View style={styles.secretData}>
+						<Text style={styles.secretText}>Super secret data....</Text>
+					</View>
+					<View style={styles.buttonContainer}>
+						<Button title="Logout" onPress={logoutHandler} />
+					</View>
+				</>
+			)}
 		</View>
 	)
 }
@@ -41,10 +47,24 @@ const Dashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center',
 	},
 	text: {
 		textAlign: 'center',
+		fontSize: 30,
+		fontWeight: 'bold',
+	},
+	buttonContainer: {
+		flex: 1,
+		minWidth: '50%',
+		alignSelf: 'center',
+	},
+	secretData: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	secretText: {
+		fontSize: 20,
 	},
 })
 
