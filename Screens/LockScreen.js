@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { View, Text, StyleSheet } from 'react-native'
-import { Button } from 'react-native-elements'
+import { View, StyleSheet } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { showMessage } from 'react-native-flash-message'
+import { Button, Input } from 'react-native-elements'
 import { unlock } from '../Reducers/lockSlice'
 
 const LockScreen = ({ navigation }) => {
+	const [pin, setPin] = useState(null)
 	const dispatch = useDispatch()
 
 	const lockedState = useSelector((state) => state.lockedState)
@@ -17,10 +20,33 @@ const LockScreen = ({ navigation }) => {
 	}, [locked])
 
 	const handleUnlock = () => {
-		dispatch(unlock())
+		getData(pin)
 	}
+	const getData = async (pin) => {
+		try {
+			const value = await AsyncStorage.getItem('pin')
+			if (value !== null) {
+				// value previously stored
+				if (value === pin) {
+					dispatch(unlock())
+				} else {
+					showMessage({
+						message: 'Incorrect Pin!',
+						type: 'danger',
+						floating: false,
+						style: { alignItems: 'center' },
+					})
+				}
+			}
+		} catch (e) {
+			// error reading value
+			console.log(e)
+		}
+	}
+
 	return (
 		<View style={styles.container}>
+			<Input placeholder="Pin" onChangeText={(e) => setPin(e)} />
 			<Button title="Unlock" onPress={handleUnlock} />
 		</View>
 	)

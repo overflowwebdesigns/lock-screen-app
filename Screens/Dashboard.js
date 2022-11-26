@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, StyleSheet } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Button, Input } from 'react-native-elements'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { logout, pending, clear } from '../Reducers/loginSlice'
 import Loading from '../Components/Loading'
 import StateMonitor from '../Components/StateMonitor'
 
 const Dashboard = ({ navigation }) => {
+	const [pin, setPin] = useState(null)
 	const dispatch = useDispatch()
 
 	const userLogin = useSelector((state) => state.userLogin)
@@ -20,16 +22,31 @@ const Dashboard = ({ navigation }) => {
 		if (locked) {
 			navigation.navigate('LockScreen')
 		}
+
 		dispatch(clear())
 		if (!userInfo.email) {
 			navigation.navigate('Login')
 		}
-	}, [userInfo, loading, error, locked])
+	}, [userInfo, loading, error, locked, pin])
 
 	const logoutHandler = (e) => {
 		e.preventDefault()
 		dispatch(pending())
 		dispatch(logout())
+	}
+
+	const handlePin = (e) => {
+		e.preventDefault()
+		storeData(pin)
+	}
+
+	const storeData = async (value) => {
+		try {
+			await AsyncStorage.setItem('pin', value)
+		} catch (e) {
+			// saving error
+			console.log(e)
+		}
 	}
 
 	return (
@@ -42,6 +59,11 @@ const Dashboard = ({ navigation }) => {
 					<View style={styles.secretData}>
 						<Text style={styles.secretText}>Super secret data....</Text>
 						<StateMonitor />
+					</View>
+
+					<View style={styles.buttonContainer}>
+						<Input placeholder="Pin" onChangeText={(e) => setPin(e)} />
+						<Button title="Create Pin" onPress={handlePin} />
 					</View>
 					<View style={styles.buttonContainer}>
 						<Button title="Logout" onPress={logoutHandler} />
@@ -64,8 +86,6 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		flex: 1,
-		minWidth: '50%',
-		alignSelf: 'center',
 	},
 	secretData: {
 		flex: 1,
