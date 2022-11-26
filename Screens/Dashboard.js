@@ -13,12 +13,18 @@ const Dashboard = ({ navigation }) => {
 	const userLogin = useSelector((state) => state.userLogin)
 	const { loading, error, userInfo } = userLogin
 
+	const lockedState = useSelector((state) => state.lockedState)
+	const { locked } = lockedState
+
 	useEffect(() => {
+		if (locked) {
+			navigation.navigate('LockScreen')
+		}
 		dispatch(clear())
 		if (!userInfo.email) {
 			navigation.navigate('Login')
 		}
-	}, [userInfo, loading, error])
+	}, [userInfo, loading, error, locked])
 
 	const logoutHandler = (e) => {
 		e.preventDefault()

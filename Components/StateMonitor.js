@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { AppState, Text } from 'react-native'
+import { lock, unlock } from '../Reducers/lockSlice'
 
 const StateMonitor = () => {
+	const dispatch = useDispatch()
+
 	const appState = useRef(AppState.currentState)
-	const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
+	const lockedState = useSelector((state) => state.lockedState)
+	const { locked } = lockedState
 
 	useEffect(() => {
 		const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -11,12 +17,10 @@ const StateMonitor = () => {
 				appState.current.match(/inactive|background/) &&
 				nextAppState === 'active'
 			) {
-				console.log('App has come to the foreground!')
+				dispatch(lock())
 			}
 
 			appState.current = nextAppState
-			setAppStateVisible(appState.current)
-			console.log('AppState', appState.current)
 		})
 
 		return () => {
@@ -24,7 +28,7 @@ const StateMonitor = () => {
 		}
 	}, [])
 
-	return <Text>App is {appStateVisible}</Text>
+	return
 }
 
 export default StateMonitor

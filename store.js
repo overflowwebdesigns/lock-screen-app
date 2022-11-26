@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 //Bring in components
 import loginSlice from './Reducers/loginSlice'
+import lockSlice from './Reducers/lockSlice'
 
 const persistConfig = {
 	key: 'root',
@@ -14,6 +15,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
 	userLogin: loginSlice,
+	lockedState: lockSlice,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

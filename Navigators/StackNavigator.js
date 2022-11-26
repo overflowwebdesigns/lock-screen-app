@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import Login from '../Screens/Login'
 import Dashboard from '../Screens/Dashboard'
-import { Button } from 'react-native-elements'
+import LockScreen from '../Screens/LockScreen'
 import { StyleSheet } from 'react-native'
 
 const StackNavigator = () => {
@@ -29,6 +29,13 @@ const StackNavigator = () => {
 					headerLeft: () => null,
 				}}
 				component={Dashboard}
+			/>
+			<Stack.Screen
+				name="LockScreen"
+				options={{
+					headerShown: false,
+				}}
+				component={LockScreen}
 			/>
 		</Stack.Navigator>
 	)
