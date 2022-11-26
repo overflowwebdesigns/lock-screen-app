@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements'
 
 import { logout, pending, clear } from '../Reducers/loginSlice'
 import Loading from '../Components/Loading'
+import StateMonitor from '../Components/StateMonitor'
 
 const Dashboard = ({ navigation }) => {
 	const dispatch = useDispatch()
@@ -34,6 +35,7 @@ const Dashboard = ({ navigation }) => {
 					<Text style={styles.text}>Welcome {userInfo.name}</Text>
 					<View style={styles.secretData}>
 						<Text style={styles.secretText}>Super secret data....</Text>
+						<StateMonitor />
 					</View>
 					<View style={styles.buttonContainer}>
 						<Button title="Logout" onPress={logoutHandler} />
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 30,
 		fontWeight: 'bold',
+		paddingTop: 5,
 	},
 	buttonContainer: {
 		flex: 1,
