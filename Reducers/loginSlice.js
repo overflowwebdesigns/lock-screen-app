@@ -55,7 +55,7 @@ export default loginSlice.reducer
 
 // set up axios - simple json-server prototype config here
 const api = axios.create({
-	baseURL: 'http://srv-captain--lock-screen-backend/',
+	baseURL: 'http://lock-screen-backend.overflowhosting.tech/',
 	headers: {
 		'Content-Type': 'application/json',
 	},
