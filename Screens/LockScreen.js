@@ -32,9 +32,10 @@ const LockScreen = ({ navigation }) => {
 				} else {
 					showMessage({
 						message: 'Incorrect Pin!',
-						type: 'danger',
+						type: 'info',
 						floating: false,
 						style: { alignItems: 'center' },
+						position: 'top',
 					})
 				}
 			}

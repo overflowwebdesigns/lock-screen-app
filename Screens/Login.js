@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import {
+	KeyboardAvoidingView,
+	TouchableWithoutFeedback,
+	Keyboard,
+	Platform,
+} from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
@@ -25,10 +32,11 @@ const Login = ({ navigation }) => {
 		if (error) {
 			showMessage({
 				message: error,
-				type: 'danger',
+				type: 'info',
 				floating: false,
 				style: { alignItems: 'center' },
 				fontWeight: 'bold',
+				position: 'top',
 			})
 		}
 	}, [userInfo, navigation, error])
@@ -40,6 +48,7 @@ const Login = ({ navigation }) => {
 				type: 'warning',
 				floating: false,
 				style: { alignItems: 'center' },
+				position: 'top',
 			})
 		} else {
 			dispatch(pending())
@@ -48,38 +57,45 @@ const Login = ({ navigation }) => {
 	}
 
 	return (
-		<View style={styles.container}>
-			{loading ? (
-				<Loading />
-			) : (
-				<>
-					<Image style={styles.image} source={Logo} />
-					<View style={styles.form}>
-						<Input
-							placeholder="Email Address"
-							onChangeText={(e) => setEmail(e)}
-						/>
+		<SafeAreaView style={styles.container}>
+			<KeyboardAvoidingView
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				style={styles.container}
+			>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					{loading ? (
+						<Loading />
+					) : (
+						<>
+							<Image style={styles.image} source={Logo} />
+							<View style={styles.form}>
+								<Input
+									placeholder="Email Address"
+									onChangeText={(e) => setEmail(e)}
+								/>
 
-						<Input
-							placeholder="Password"
-							secureTextEntry={true}
-							onChangeText={(e) => setPassword(e)}
-						/>
-						<Button
-							buttonStyle={styles.loginButton}
-							title="Login"
-							onPress={loginHandler}
-						/>
-						<Button
-							buttonStyle={styles.registerButton}
-							titleStyle={{ color: 'black' }}
-							title="Register"
-							onPress={() => navigation.navigate('Register')}
-						/>
-					</View>
-				</>
-			)}
-		</View>
+								<Input
+									placeholder="Password"
+									secureTextEntry={true}
+									onChangeText={(e) => setPassword(e)}
+								/>
+								<Button
+									buttonStyle={styles.loginButton}
+									title="Login"
+									onPress={loginHandler}
+								/>
+								<Button
+									buttonStyle={styles.registerButton}
+									titleStyle={{ color: 'black' }}
+									title="Register"
+									onPress={() => navigation.navigate('Register')}
+								/>
+							</View>
+						</>
+					)}
+				</TouchableWithoutFeedback>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	)
 }
 
@@ -88,7 +104,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	image: {
-		marginTop: 100,
+		marginTop: 20,
 		width: 200,
 		height: 180,
 		alignSelf: 'center',

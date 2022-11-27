@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, StyleSheet } from 'react-native'
 import { Button, Input } from 'react-native-elements'
+import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { logout, pending, clear } from '../Reducers/loginSlice'
@@ -10,6 +11,7 @@ import StateMonitor from '../Components/StateMonitor'
 
 const Dashboard = ({ navigation }) => {
 	const [pin, setPin] = useState(null)
+	const [pinSet, setPinSet] = useState(false)
 	const dispatch = useDispatch()
 
 	const userLogin = useSelector((state) => state.userLogin)
@@ -27,7 +29,19 @@ const Dashboard = ({ navigation }) => {
 		if (!userInfo.email) {
 			navigation.navigate('Login')
 		}
-	}, [userInfo, loading, error, locked, pin])
+
+		if (pinSet) {
+			showMessage({
+				message: 'Pin Created!',
+				type: 'info',
+				floating: false,
+				style: { alignItems: 'center' },
+				position: 'top',
+			})
+			setPinSet(false)
+			setPin(null)
+		}
+	}, [userInfo, loading, error, locked, pin, pinSet])
 
 	const logoutHandler = (e) => {
 		e.preventDefault()
@@ -43,6 +57,7 @@ const Dashboard = ({ navigation }) => {
 	const storeData = async (value) => {
 		try {
 			await AsyncStorage.setItem('pin', value)
+			setPinSet(true)
 		} catch (e) {
 			// saving error
 			console.log(e)
@@ -62,7 +77,11 @@ const Dashboard = ({ navigation }) => {
 					</View>
 
 					<View style={styles.buttonContainer}>
-						<Input placeholder="Pin" onChangeText={(e) => setPin(e)} />
+						<Input
+							placeholder="Pin"
+							onChangeText={(e) => setPin(e)}
+							value={pin}
+						/>
 						<Button title="Create Pin" onPress={handlePin} />
 					</View>
 					<View style={styles.buttonContainer}>
