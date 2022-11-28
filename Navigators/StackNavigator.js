@@ -34,6 +34,7 @@ const StackNavigator = () => {
 				name="LockScreen"
 				options={{
 					headerShown: false,
+					gestureEnabled: false,
 				}}
 				component={LockScreen}
 			/>

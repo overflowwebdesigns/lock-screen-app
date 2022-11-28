@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { View, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { showMessage } from 'react-native-flash-message'
 import { Button, Input } from 'react-native-elements'
 import { unlock } from '../Reducers/lockSlice'
+import { SafeAreaView } from 'react-navigation'
 
 const LockScreen = ({ navigation }) => {
 	const [pin, setPin] = useState(null)
@@ -46,10 +48,16 @@ const LockScreen = ({ navigation }) => {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Input placeholder="Pin" onChangeText={(e) => setPin(e)} />
-			<Button title="Unlock" onPress={handleUnlock} />
-		</View>
+		<SafeAreaView style={styles.container}>
+			<KeyboardAwareScrollView contentContainerStyle={styles.container}>
+				<Input
+					placeholder="Pin"
+					onChangeText={(e) => setPin(e)}
+					keyboardType="decimal-pad"
+				/>
+				<Button title="Unlock" onPress={handleUnlock} />
+			</KeyboardAwareScrollView>
+		</SafeAreaView>
 	)
 }
 
@@ -57,6 +65,9 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
+	},
+	test: {
+		marginTop: '25%',
 	},
 })
 

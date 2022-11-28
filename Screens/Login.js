@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {
-	KeyboardAvoidingView,
-	TouchableWithoutFeedback,
-	Keyboard,
-	Platform,
-} from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Input, Button } from 'react-native-elements'
 import { useSelector, useDispatch } from 'react-redux'
 import { showMessage } from 'react-native-flash-message'
@@ -58,43 +53,36 @@ const Login = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				style={styles.container}
-			>
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					{loading ? (
-						<Loading />
-					) : (
-						<>
-							<Image style={styles.image} source={Logo} />
-							<View style={styles.form}>
-								<Input
-									placeholder="Email Address"
-									onChangeText={(e) => setEmail(e)}
-								/>
+			{loading ? (
+				<Loading />
+			) : (
+				<ScrollView>
+					<KeyboardAwareScrollView>
+						<Image style={styles.image} source={Logo} />
+						<Input
+							placeholder="Email Address"
+							onChangeText={(e) => setEmail(e)}
+						/>
 
-								<Input
-									placeholder="Password"
-									secureTextEntry={true}
-									onChangeText={(e) => setPassword(e)}
-								/>
-								<Button
-									buttonStyle={styles.loginButton}
-									title="Login"
-									onPress={loginHandler}
-								/>
-								<Button
-									buttonStyle={styles.registerButton}
-									titleStyle={{ color: 'black' }}
-									title="Register"
-									onPress={() => navigation.navigate('Register')}
-								/>
-							</View>
-						</>
-					)}
-				</TouchableWithoutFeedback>
-			</KeyboardAvoidingView>
+						<Input
+							placeholder="Password"
+							secureTextEntry={true}
+							onChangeText={(e) => setPassword(e)}
+						/>
+						<Button
+							buttonStyle={styles.loginButton}
+							title="Login"
+							onPress={loginHandler}
+						/>
+						<Button
+							buttonStyle={styles.registerButton}
+							titleStyle={{ color: 'black' }}
+							title="Register"
+							onPress={() => navigation.navigate('Register')}
+						/>
+					</KeyboardAwareScrollView>
+				</ScrollView>
+			)}
 		</SafeAreaView>
 	)
 }
@@ -109,6 +97,7 @@ const styles = StyleSheet.create({
 		height: 180,
 		alignSelf: 'center',
 		borderRadius: 25,
+		marginBottom: 50,
 	},
 	form: {
 		marginTop: 50,

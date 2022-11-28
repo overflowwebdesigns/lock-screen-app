@@ -4,14 +4,16 @@ import { View, Text, StyleSheet } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { showMessage } from 'react-native-flash-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { logout, pending, clear } from '../Reducers/loginSlice'
 import Loading from '../Components/Loading'
 import StateMonitor from '../Components/StateMonitor'
+import { unlock } from '../Reducers/lockSlice'
 
 const Dashboard = ({ navigation }) => {
 	const [pin, setPin] = useState(null)
 	const [pinSet, setPinSet] = useState(false)
+	const [pinNull, setPinNull] = useState(true)
 	const dispatch = useDispatch()
 
 	const userLogin = useSelector((state) => state.userLogin)
@@ -21,7 +23,7 @@ const Dashboard = ({ navigation }) => {
 	const { locked } = lockedState
 
 	useEffect(() => {
-		if (locked) {
+		if (locked && !pinNull) {
 			navigation.navigate('LockScreen')
 		}
 
@@ -43,10 +45,18 @@ const Dashboard = ({ navigation }) => {
 		}
 	}, [userInfo, loading, error, locked, pin, pinSet])
 
-	const logoutHandler = (e) => {
+	const logoutHandler = async (e) => {
 		e.preventDefault()
 		dispatch(pending())
 		dispatch(logout())
+		dispatch(unlock())
+		try {
+			await AsyncStorage.removeItem('pin')
+			setPinNull(true)
+		} catch (e) {
+			// saving error
+			console.log(e)
+		}
 	}
 
 	const handlePin = (e) => {
@@ -58,6 +68,7 @@ const Dashboard = ({ navigation }) => {
 		try {
 			await AsyncStorage.setItem('pin', value)
 			setPinSet(true)
+			setPinNull(false)
 		} catch (e) {
 			// saving error
 			console.log(e)
@@ -69,25 +80,27 @@ const Dashboard = ({ navigation }) => {
 			{loading ? (
 				<Loading />
 			) : (
-				<>
-					<Text style={styles.text}>Welcome {userInfo.name}</Text>
-					<View style={styles.secretData}>
-						<Text style={styles.secretText}>Super secret data....</Text>
-						<StateMonitor />
+				<KeyboardAwareScrollView contentContainerStyle={styles.container}>
+					<View style={styles.container}>
+						<Text style={styles.text}>Welcome {userInfo.name}</Text>
+						<View style={styles.secretData}>
+							<Text style={styles.secretText}>Super secret data....</Text>
+							<StateMonitor />
+						</View>
+						<View style={styles.buttonContainer}>
+							<Input
+								placeholder="Pin"
+								keyboardType="decimal-pad"
+								onChangeText={(e) => setPin(e)}
+								value={pin}
+							/>
+							<Button title="Create Pin" onPress={handlePin} />
+						</View>
+						<View style={styles.buttonContainer}>
+							<Button title="Logout" onPress={logoutHandler} />
+						</View>
 					</View>
-
-					<View style={styles.buttonContainer}>
-						<Input
-							placeholder="Pin"
-							onChangeText={(e) => setPin(e)}
-							value={pin}
-						/>
-						<Button title="Create Pin" onPress={handlePin} />
-					</View>
-					<View style={styles.buttonContainer}>
-						<Button title="Logout" onPress={logoutHandler} />
-					</View>
-				</>
+				</KeyboardAwareScrollView>
 			)}
 		</View>
 	)
