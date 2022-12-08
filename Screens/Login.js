@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
 		if (error) {
 			showMessage({
 				message: error,
-				type: 'info',
+				type: 'danger',
 				floating: false,
 				style: { alignItems: 'center' },
 				fontWeight: 'bold',
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 	},
 	loginButton: {
 		margin: 25,
-		backgroundColor: '#d83450',
+		backgroundColor: '#2196f3',
 		fontWeight: 'bold',
 	},
 	registerButton: {

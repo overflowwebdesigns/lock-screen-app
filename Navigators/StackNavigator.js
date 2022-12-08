@@ -16,7 +16,7 @@ const StackNavigator = () => {
 				options={{
 					headerShown: true,
 					headerTintColor: 'white',
-					headerStyle: { backgroundColor: '#d83450' },
+					headerStyle: { backgroundColor: '#2196f3' },
 				}}
 				component={Login}
 			/>
@@ -25,7 +25,7 @@ const StackNavigator = () => {
 				options={{
 					headerShown: true,
 					headerTintColor: 'white',
-					headerStyle: { backgroundColor: '#d83450' },
+					headerStyle: { backgroundColor: '#2196f3' },
 					headerLeft: () => null,
 				}}
 				component={Dashboard}

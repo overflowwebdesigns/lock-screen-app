@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store'
 import { showMessage } from 'react-native-flash-message'
 import { Button, Input } from 'react-native-elements'
 import { unlock } from '../Reducers/lockSlice'
@@ -26,7 +26,7 @@ const LockScreen = ({ navigation }) => {
 	}
 	const getData = async (pin) => {
 		try {
-			const value = await AsyncStorage.getItem('pin')
+			const value = await SecureStore.getItemAsync('pin')
 			if (value !== null) {
 				// value previously stored
 				if (value === pin) {
@@ -34,7 +34,7 @@ const LockScreen = ({ navigation }) => {
 				} else {
 					showMessage({
 						message: 'Incorrect Pin!',
-						type: 'info',
+						type: 'danger',
 						floating: false,
 						style: { alignItems: 'center' },
 						position: 'top',

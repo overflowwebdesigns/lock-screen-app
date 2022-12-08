@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, StyleSheet } from 'react-native'
 import { Button, Input } from 'react-native-elements'
 import { showMessage } from 'react-native-flash-message'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as SecureStore from 'expo-secure-store'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { logout, pending, clear } from '../Reducers/loginSlice'
 import Loading from '../Components/Loading'
@@ -35,7 +35,7 @@ const Dashboard = ({ navigation }) => {
 		if (pinSet) {
 			showMessage({
 				message: 'Pin Created!',
-				type: 'info',
+				type: 'success',
 				floating: false,
 				style: { alignItems: 'center' },
 				position: 'top',
@@ -51,7 +51,7 @@ const Dashboard = ({ navigation }) => {
 		dispatch(logout())
 		dispatch(unlock())
 		try {
-			await AsyncStorage.removeItem('pin')
+			await SecureStore.deleteItemAsync('pin')
 			setPinNull(true)
 		} catch (e) {
 			// saving error
@@ -66,7 +66,7 @@ const Dashboard = ({ navigation }) => {
 
 	const storeData = async (value) => {
 		try {
-			await AsyncStorage.setItem('pin', value)
+			await SecureStore.setItemAsync('pin', value)
 			setPinSet(true)
 			setPinNull(false)
 		} catch (e) {
